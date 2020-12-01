@@ -57,8 +57,14 @@ function setup() {
   cnv = createCanvas(windowWidth, windowHeight);
   colorMode(HSB);
 
-  const undoItem = new tbi.ToolBarItem(undoImg, () => paths.pop());
-  const eraseAllItem = new tbi.ToolBarItem(eraseAllImg, () => paths.splice(0, paths.length));
+  const undoItem = new tbi.ToolBarItem(undoImg, () => {
+    paths.pop();
+    strokes.pop();
+  });
+  const eraseAllItem = new tbi.ToolBarItem(eraseAllImg, () => {
+    paths.splice(0, paths.length);
+    strokes.splice(0, strokes.length);
+  });
   const saveItem = new tbi.ToolBarItem(saveImg, saveCnv);
   const toolBarItems = [undoItem, eraseAllItem, saveItem];
 
