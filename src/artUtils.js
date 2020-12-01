@@ -27,13 +27,13 @@ function drawInWedges(x1, y1, x2, y2, nWedges) {
   }
 }
 
-function drawPaths(pathArray, palette) {
+function drawPaths(pathArray, strokes) {
   pathArray.forEach((path, i) => {
     if (path.length < 2) {
       return;
     }
 
-    stroke(palette[i % palette.length]);
+    stroke(strokes[i]);
     path.forEach(([x, y], j) => {
       if (j === 0) {
         return;

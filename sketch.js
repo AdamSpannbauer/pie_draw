@@ -2,6 +2,7 @@ import art from './src/artUtils.js';
 import path from './src/pathUtils.js';
 import tb from './src/toolBar.js';
 import tbi from './src/toolBarItem.js';
+import ptbi from './src/paletteToolBarItem.js';
 
 let DRAWING = false;
 
@@ -9,8 +10,10 @@ let cnv;
 
 const nColors = 3;
 let colorPalette;
+let colorSelected;
 
 const paths = [];
+const strokes = [];
 const pathPrec = 2;
 
 let undoImg;
@@ -30,17 +33,19 @@ function saveCnv() {
   translate(width / 2, height / 2);
   strokeWeight(10);
 
-  art.drawPaths(paths, colorPalette);
+  art.drawPaths(paths, strokes);
   saveCanvas(cnv, 'my_pie_drawing', 'png');
 }
 
 function touchStarted() {
-  const toolbarEventTriggered = toolbar.clickEvent(mouseX, mouseY);
+  const [toolbarEventTriggered, cSelected] = toolbar.clickEvent(mouseX, mouseY);
+  if (cSelected !== null) colorSelected = cSelected;
   if (toolbarEventTriggered) return;
 
   DRAWING = true;
 
   paths.push([]);
+  strokes.push(colorSelected);
   path.appendMouseXYToPath(paths[paths.length - 1], pathPrec);
 }
 
@@ -55,10 +60,14 @@ function setup() {
   const undoItem = new tbi.ToolBarItem(undoImg, () => paths.pop());
   const eraseAllItem = new tbi.ToolBarItem(eraseAllImg, () => paths.splice(0, paths.length));
   const saveItem = new tbi.ToolBarItem(saveImg, saveCnv);
+  const toolBarItems = [undoItem, eraseAllItem, saveItem];
 
   colorPalette = art.generatePalette(nColors);
+  const paletteToolBarItems = colorPalette.map((c) => new ptbi.PaletteToolBarItem(c));
+  paletteToolBarItems[0].selected = true;
+  colorSelected = paletteToolBarItems[0].c;
 
-  toolbar = new tb.ToolBar(5, 5, 50, 10, [undoItem, eraseAllItem, saveItem]);
+  toolbar = new tb.ToolBar(5, 5, 50, 10, toolBarItems, paletteToolBarItems);
 }
 
 function draw() {
@@ -70,7 +79,7 @@ function draw() {
     path.appendMouseXYToPath(paths[paths.length - 1], pathPrec);
   }
 
-  art.drawPaths(paths, colorPalette);
+  art.drawPaths(paths, strokes);
   art.drawOverlay(DRAWING);
 
   translate(-width / 2, -height / 2);
