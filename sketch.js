@@ -99,7 +99,6 @@ function generatePalette(n) {
 
 function setup() {
   cnv = createCanvas(windowWidth, windowHeight);
-  strokeWeight(10);
   colorMode(HSB);
 
   colorPalette = generatePalette(nColors);
@@ -117,6 +116,7 @@ function drawInWedges(x1, y1, x2, y2, nWedges) {
 
 function draw() {
   background(0, 10, 10);
+  strokeWeight(10);
   translate(width / 2, height / 2);
 
   if (DRAWING) {
@@ -139,6 +139,16 @@ function draw() {
       drawInWedges(prevX, prevY, x, y, 8);
     });
   });
+
+  if (DRAWING) {
+    stroke(0, 0, 50, 0.15);
+    strokeWeight(2);
+    drawInWedges(0, 0, width, 0, 8);
+  } else {
+    fill(0, 0, 50, 0.25);
+    noStroke();
+    ellipse(0, 0, 5, 5);
+  }
 
   image(undoImg, -width / 2 + 10, -height / 2 + 10, undoDims[0], undoDims[1]);
   image(
