@@ -3,13 +3,17 @@ let DRAWING = false;
 const nColors = 3;
 let colorPalette;
 
-const paths = [];
+let paths = [];
 const pathPrec = 2;
 
 let undoImg;
+const undoDims = [50, 50];
+let eraseAllImg;
+const eraseAllDims = [45, 50];
 
 function preload() {
   undoImg = loadImage('./assets/imgs/undo.png');
+  eraseAllImg = loadImage('./assets/imgs/erase_all.png');
 }
 
 function roundTo(x, n) {
@@ -36,8 +40,18 @@ function adjustedMouseXY() {
 }
 
 function touchStarted() {
-  if (mouseX < 50 && mouseY < 50) {
+  // TODO: make better toolbar logic and get rid of all these magic numbers
+  if (mouseX < 10 + undoDims[0] && mouseY < 10 + undoDims[1]) {
     paths.pop();
+    return;
+  }
+
+  if (
+    mouseX > 10 + 20 + undoDims[0]
+    && mouseX < 10 + 20 + undoDims[0] + eraseAllDims[0]
+    && mouseY < 50
+  ) {
+    paths = [];
     return;
   }
 
@@ -114,7 +128,14 @@ function draw() {
     });
   });
 
-  image(undoImg, -width / 2 + 10, -height / 2 + 10, 50, 50);
+  image(undoImg, -width / 2 + 10, -height / 2 + 10, undoDims[0], undoDims[1]);
+  image(
+    eraseAllImg,
+    -width / 2 + 20 + undoDims[0],
+    -height / 2 + 10,
+    eraseAllDims[0],
+    eraseAllDims[1],
+  );
 }
 
 window.preload = preload;
