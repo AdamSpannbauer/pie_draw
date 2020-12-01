@@ -1,5 +1,7 @@
 let DRAWING = false;
 
+let cnv;
+
 const nColors = 3;
 let colorPalette;
 
@@ -10,10 +12,13 @@ let undoImg;
 const undoDims = [50, 50];
 let eraseAllImg;
 const eraseAllDims = [45, 50];
+let saveImg;
+const saveDims = [50, 50];
 
 function preload() {
   undoImg = loadImage('./assets/imgs/undo.png');
   eraseAllImg = loadImage('./assets/imgs/erase_all.png');
+  saveImg = loadImage('./assets/imgs/save.png');
 }
 
 function roundTo(x, n) {
@@ -55,6 +60,13 @@ function touchStarted() {
     return;
   }
 
+  if (mouseX > 10 + 20 + 20 + undoDims[0] + eraseAllDims[0]
+    && mouseX < 10 + 20 + 20 + undoDims[0] + eraseAllDims[0] + saveDims[0]
+    && mouseY < 50
+  ) {
+    saveCanvas(cnv, 'my_pie_drawing', 'png');
+  }
+
   DRAWING = true;
 
   const [prevX, prevY] = adjustedMouseXY();
@@ -86,7 +98,7 @@ function generatePalette(n) {
 }
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);
+  cnv = createCanvas(windowWidth, windowHeight);
   strokeWeight(10);
   colorMode(HSB);
 
@@ -135,6 +147,13 @@ function draw() {
     -height / 2 + 10,
     eraseAllDims[0],
     eraseAllDims[1],
+  );
+  image(
+    saveImg,
+    -width / 2 + 20 + 10 + undoDims[0] + eraseAllDims[0],
+    -height / 2 + 10,
+    saveDims[0],
+    saveDims[1],
   );
 }
 
