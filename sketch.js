@@ -64,6 +64,9 @@ function touchStarted() {
     && mouseX < 10 + 20 + 20 + undoDims[0] + eraseAllDims[0] + saveDims[0]
     && mouseY < 50
   ) {
+    background(0, 10, 10);
+    strokeWeight(10);
+    drawPaths(paths);
     saveCanvas(cnv, 'my_pie_drawing', 'png');
   }
 
@@ -114,18 +117,8 @@ function drawInWedges(x1, y1, x2, y2, nWedges) {
   }
 }
 
-function draw() {
-  background(0, 10, 10);
-  strokeWeight(10);
-  translate(width / 2, height / 2);
-
-  if (DRAWING) {
-    const [x, y] = adjustedMouseXY();
-    const [prevX, prevY] = [x, y];
-    appendToPath(paths[paths.length - 1], prevX, prevY);
-  }
-
-  paths.forEach((path, i) => {
+function drawPaths(pathArray) {
+  pathArray.forEach((path, i) => {
     if (path.length < 2) {
       return;
     }
@@ -139,6 +132,20 @@ function draw() {
       drawInWedges(prevX, prevY, x, y, 8);
     });
   });
+}
+
+function draw() {
+  background(0, 10, 10);
+  strokeWeight(10);
+  translate(width / 2, height / 2);
+
+  if (DRAWING) {
+    const [x, y] = adjustedMouseXY();
+    const [prevX, prevY] = [x, y];
+    appendToPath(paths[paths.length - 1], prevX, prevY);
+  }
+
+  drawPaths(paths);
 
   if (DRAWING) {
     stroke(0, 0, 50, 0.15);
