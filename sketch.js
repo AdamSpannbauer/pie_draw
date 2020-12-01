@@ -1,7 +1,7 @@
 import art from './src/artUtils.js';
 import path from './src/pathUtils.js';
-import tb from './src/toolbar.js';
-import tbi from './src/toolbaritem.js';
+import tb from './src/toolBar.js';
+import tbi from './src/toolBarItem.js';
 
 let DRAWING = false;
 
