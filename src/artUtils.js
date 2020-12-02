@@ -2,18 +2,21 @@ function generatePalette(n) {
   const da = 360 / n;
   const palette = [];
 
-  let h = random(360);
-  const s = random(50, 100);
-  const b = random(50, 100);
-  palette.push([h, s, b]);
+  let hue = random(360);
+  const sat = random(70, 100);
+  const brt = random(70, 100);
 
-  for (let i = 1; i < n; i += 1) {
-    h = palette[i - 1][0] + da;
-    if (h > 360) {
-      h -= 360;
+  for (let i = 0; i < n; i += 1) {
+    hue += da * i;
+    if (hue > 360) {
+      hue -= 360;
     }
-    palette.push([h, s, b]);
+    palette.push([hue, sat, brt]);
+    palette.push([hue, sat - 30, brt - 30]);
   }
+
+  // const darks = palette.map(([h, s, b]) => [h, s - 20, b - 20]);
+
   return palette;
 }
 

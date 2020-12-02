@@ -1,13 +1,14 @@
 class ToolBarItem {
-  constructor(img, clickAction) {
+  constructor(img, h, clickAction) {
     this.img = img;
     this.clickAction = clickAction;
+
+    this.h = h;
+    this.w = this.imgWidth(h);
 
     // Will be set when drawn first time
     this.x = 0;
     this.y = 0;
-    this.w = 0;
-    this.h = 0;
   }
 
   imgWidth(h) {
@@ -27,11 +28,9 @@ class ToolBarItem {
     return eventTriggered;
   }
 
-  draw(x, y, h) {
+  draw(x, y) {
     this.x = x;
     this.y = y;
-    this.h = h;
-    this.w = this.imgWidth(h);
 
     image(this.img, this.x, this.y, this.w, this.h);
   }

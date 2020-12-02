@@ -1,13 +1,14 @@
 class PaletteToolBarItem {
-  constructor(c) {
+  constructor(c, w, h) {
     this.selected = false;
     this.c = c;
+
+    this.w = w;
+    this.h = h;
 
     // Set in draw
     this.x = 0;
     this.y = 0;
-    this.w = 0;
-    this.h = 0;
   }
 
   clickEvent(x, y) {
@@ -22,11 +23,9 @@ class PaletteToolBarItem {
     return eventTriggered;
   }
 
-  draw(x, y, h) {
+  draw(x, y) {
     this.x = x;
     this.y = y;
-    this.h = h;
-    this.w = h;
 
     push();
     fill(this.c);

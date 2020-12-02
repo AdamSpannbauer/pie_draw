@@ -8,7 +8,7 @@ let DRAWING = false;
 
 let cnv;
 
-const nColors = 4;
+let nColors = 4;
 let colorPalette;
 let colorSelected;
 
@@ -22,6 +22,8 @@ let undoImg;
 let eraseAllImg;
 let saveImg;
 let toolbar;
+const toolBarHeight = 50;
+const toolBarItemGap = 10;
 
 function preload() {
   undoImg = loadImage('./assets/imgs/undo.png');
@@ -59,23 +61,35 @@ function setup() {
   cnv = createCanvas(windowWidth, windowHeight);
   colorMode(HSB);
 
-  const undoItem = new tbi.ToolBarItem(undoImg, () => {
+  const undoItem = new tbi.ToolBarItem(undoImg, toolBarHeight, () => {
     paths.pop();
     strokes.pop();
   });
-  const eraseAllItem = new tbi.ToolBarItem(eraseAllImg, () => {
+  const eraseAllItem = new tbi.ToolBarItem(eraseAllImg, toolBarHeight, () => {
     paths.splice(0, paths.length);
     strokes.splice(0, strokes.length);
   });
-  const saveItem = new tbi.ToolBarItem(saveImg, saveCnv);
+  const saveItem = new tbi.ToolBarItem(saveImg, toolBarHeight, saveCnv);
   const toolBarItems = [undoItem, eraseAllItem, saveItem];
 
   colorPalette = art.generatePalette(nColors);
-  const paletteToolBarItems = colorPalette.map((c) => new ptbi.PaletteToolBarItem(c));
+  nColors = colorPalette.length;
+
+  const toolBarWidth = toolBarItems.reduce((accum, curr) => accum + curr.w, 0);
+  let swatchW = (width - 5 - toolBarWidth) / nColors;
+  swatchW -= toolBarItemGap * 1.35;
+
+  if (swatchW > toolBarHeight) {
+    swatchW = toolBarHeight;
+  }
+
+  const paletteToolBarItems = colorPalette.map(
+    (c) => new ptbi.PaletteToolBarItem(c, swatchW, toolBarHeight),
+  );
   paletteToolBarItems[0].selected = true;
   colorSelected = paletteToolBarItems[0].c;
 
-  toolbar = new tb.ToolBar(5, 5, 50, 10, toolBarItems, paletteToolBarItems);
+  toolbar = new tb.ToolBar(5, 5, toolBarHeight, toolBarItemGap, toolBarItems, paletteToolBarItems);
 }
 
 function draw() {

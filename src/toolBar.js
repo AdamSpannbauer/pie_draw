@@ -39,12 +39,12 @@ class ToolBar {
     let { x } = this;
 
     this.items.forEach((item) => {
-      item.draw(x, this.y, this.h);
+      item.draw(x, this.y);
       x += item.w + this.gap;
     });
 
     this.paletteItems.forEach((item) => {
-      item.draw(x, this.y, this.h);
+      item.draw(x, this.y);
       x += item.w + this.gap;
     });
   }
