@@ -8,6 +8,10 @@ Create intricate geometric designs with this symmetrical sketch pad.
 
 ## Features
 
+<p align='center'>
+  <img src='readme/app_screenshot.png' width=50%>
+</p>
+
 ### Undo
 
 <p align='center'>
