@@ -47,7 +47,7 @@ function drawPaths(pathArray, strokes, wedgeNums) {
 }
 
 function drawOverlay(drawing, nWedges) {
-  if (drawing) {
+  if (drawing && nWedges > 1) {
     stroke(0, 0, 50, 0.15);
     strokeWeight(2);
     drawInWedges(0, 0, width, 0, nWedges);
