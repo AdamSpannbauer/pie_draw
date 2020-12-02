@@ -8,13 +8,15 @@ let DRAWING = false;
 
 let cnv;
 
-const nColors = 3;
+const nColors = 4;
 let colorPalette;
 let colorSelected;
 
 const paths = [];
 const strokes = [];
 const pathPrec = 2;
+const bgColor = [0, 10, 10];
+const strokeSize = 10;
 
 let undoImg;
 let eraseAllImg;
@@ -28,10 +30,10 @@ function preload() {
 }
 
 function saveCnv() {
-  background(0, 10, 10);
+  background(bgColor);
 
   translate(width / 2, height / 2);
-  strokeWeight(10);
+  strokeWeight(strokeSize);
 
   art.drawPaths(paths, strokes);
   saveCanvas(cnv, 'my_pie_drawing', 'png');
@@ -77,8 +79,8 @@ function setup() {
 }
 
 function draw() {
-  background(0, 10, 10);
-  strokeWeight(10);
+  background(bgColor);
+  strokeWeight(strokeSize);
   translate(width / 2, height / 2);
 
   if (DRAWING) {
