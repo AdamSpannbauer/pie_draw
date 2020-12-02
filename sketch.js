@@ -3,6 +3,7 @@ import path from './src/pathUtils.js';
 import tb from './src/toolBar.js';
 import tbi from './src/toolBarItem.js';
 import ptbi from './src/paletteToolBarItem.js';
+import wb from './src/wedgeBtn.js';
 
 let DRAWING = false;
 
@@ -11,7 +12,6 @@ let cnv;
 let nColors = 4;
 let colorPalette;
 let colorSelected;
-let nWedges = 8;
 
 const paths = [];
 const strokes = [];
@@ -25,8 +25,10 @@ let undoImg;
 let eraseAllImg;
 let saveImg;
 let toolbar;
+let wedgeButton;
 const toolBarHeight = 50;
 const toolBarItemGap = 10;
+const wedgeBtnR = 50;
 
 function preload() {
   undoImg = loadImage('./assets/imgs/undo.png');
@@ -49,19 +51,13 @@ function touchStarted() {
   if (cSelected !== null) colorSelected = cSelected;
   if (toolbarEventTriggered) return;
 
-  if (mouseX > width - 100 && mouseY > height - 100) {
-    nWedges -= 1;
-    if (nWedges < 1) {
-      nWedges = 8;
-    }
-    return;
-  }
+  if (wedgeButton.clickEvent(mouseX, mouseY)) return;
 
   DRAWING = true;
 
   paths.push([]);
   strokes.push(colorSelected);
-  wedgeNums.push(nWedges);
+  wedgeNums.push(wedgeButton.nWedges);
   path.appendMouseXYToPath(paths[paths.length - 1], pathPrec);
 }
 
@@ -104,6 +100,8 @@ function setup() {
   colorSelected = paletteToolBarItems[0].c;
 
   toolbar = new tb.ToolBar(5, 5, toolBarHeight, toolBarItemGap, toolBarItems, paletteToolBarItems);
+
+  wedgeButton = new wb.WedgeBtn(width - wedgeBtnR * 1.2, height - wedgeBtnR * 1.2, wedgeBtnR);
 }
 
 function draw() {
@@ -116,22 +114,12 @@ function draw() {
   }
 
   art.drawPaths(paths, strokes, wedgeNums);
-  art.drawOverlay(DRAWING, nWedges);
+  art.drawOverlay(DRAWING, wedgeButton.nWedges);
 
   translate(-width / 2, -height / 2);
-  toolbar.draw();
 
-  const r = 50;
-  push();
-  noFill();
-  stroke(0, 0, 40);
-  strokeWeight(4);
-  translate(width - r * 1.2, height - r * 1.2);
-  if (nWedges > 1) {
-    art.drawInWedges(0, 0, r, 0, nWedges);
-  }
-  ellipse(0, 0, r * 2, r * 2);
-  pop();
+  toolbar.draw();
+  wedgeButton.draw();
 }
 
 window.preload = preload;
