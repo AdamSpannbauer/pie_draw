@@ -11,9 +11,12 @@ let cnv;
 let nColors = 4;
 let colorPalette;
 let colorSelected;
+let nWedges = 8;
 
 const paths = [];
 const strokes = [];
+const wedgeNums = [];
+
 const pathPrec = 2;
 const bgColor = [0, 10, 10];
 const strokeSize = 10;
@@ -37,7 +40,7 @@ function saveCnv() {
   translate(width / 2, height / 2);
   strokeWeight(strokeSize);
 
-  art.drawPaths(paths, strokes);
+  art.drawPaths(paths, strokes, wedgeNums);
   saveCanvas(cnv, 'my_pie_drawing', 'png');
 }
 
@@ -46,10 +49,19 @@ function touchStarted() {
   if (cSelected !== null) colorSelected = cSelected;
   if (toolbarEventTriggered) return;
 
+  if (mouseX > width - 100 && mouseY > height - 100) {
+    nWedges -= 1;
+    if (nWedges < 1) {
+      nWedges = 8;
+    }
+    return;
+  }
+
   DRAWING = true;
 
   paths.push([]);
   strokes.push(colorSelected);
+  wedgeNums.push(nWedges);
   path.appendMouseXYToPath(paths[paths.length - 1], pathPrec);
 }
 
@@ -64,10 +76,12 @@ function setup() {
   const undoItem = new tbi.ToolBarItem(undoImg, toolBarHeight, () => {
     paths.pop();
     strokes.pop();
+    wedgeNums.pop();
   });
   const eraseAllItem = new tbi.ToolBarItem(eraseAllImg, toolBarHeight, () => {
     paths.splice(0, paths.length);
     strokes.splice(0, strokes.length);
+    wedgeNums.splice(0, wedgeNums.length);
   });
   const saveItem = new tbi.ToolBarItem(saveImg, toolBarHeight, saveCnv);
   const toolBarItems = [undoItem, eraseAllItem, saveItem];
@@ -101,11 +115,23 @@ function draw() {
     path.appendMouseXYToPath(paths[paths.length - 1], pathPrec);
   }
 
-  art.drawPaths(paths, strokes);
-  art.drawOverlay(DRAWING);
+  art.drawPaths(paths, strokes, wedgeNums);
+  art.drawOverlay(DRAWING, nWedges);
 
   translate(-width / 2, -height / 2);
   toolbar.draw();
+
+  const r = 50;
+  push();
+  noFill();
+  stroke(0, 0, 40);
+  strokeWeight(4);
+  translate(width - r * 1.2, height - r * 1.2);
+  if (nWedges > 1) {
+    art.drawInWedges(0, 0, r, 0, nWedges);
+  }
+  ellipse(0, 0, r * 2, r * 2);
+  pop();
 }
 
 window.preload = preload;
