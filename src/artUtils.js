@@ -15,8 +15,6 @@ function generatePalette(n) {
     palette.push([hue, sat - 30, brt - 30]);
   }
 
-  // const darks = palette.map(([h, s, b]) => [h, s - 20, b - 20]);
-
   return palette;
 }
 
@@ -30,28 +28,29 @@ function drawInWedges(x1, y1, x2, y2, nWedges) {
   }
 }
 
-function drawPaths(pathArray, strokes) {
+function drawPaths(pathArray, strokes, wedgeNums) {
   pathArray.forEach((path, i) => {
     if (path.length < 2) {
       return;
     }
 
     stroke(strokes[i]);
+    const nWedges = wedgeNums[i];
     path.forEach(([x, y], j) => {
       if (j === 0) {
         return;
       }
       const [prevX, prevY] = path[j - 1];
-      drawInWedges(prevX, prevY, x, y, 8);
+      drawInWedges(prevX, prevY, x, y, nWedges);
     });
   });
 }
 
-function drawOverlay(drawing) {
-  if (drawing) {
+function drawOverlay(drawing, nWedges) {
+  if (drawing && nWedges > 1) {
     stroke(0, 0, 50, 0.15);
     strokeWeight(2);
-    drawInWedges(0, 0, width, 0, 8);
+    drawInWedges(0, 0, width, 0, nWedges);
   } else {
     fill(0, 0, 50, 0.25);
     noStroke();
