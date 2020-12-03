@@ -35,11 +35,11 @@ function drawPaths(pathObjs) {
     }
 
     stroke(pathObj.hsb);
-    pathObj.path.forEach(([x, y], i) => {
+    pathObj.path.forEach(({ x, y }, i) => {
       if (i === 0) {
         return;
       }
-      const [prevX, prevY] = pathObj.path[i - 1];
+      const { x: prevX, y: prevY } = pathObj.path[i - 1];
       drawInWedges(prevX, prevY, x, y, pathObj.nWedges);
     });
   });

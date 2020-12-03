@@ -9,21 +9,18 @@ function adjustedMouseXY() {
 }
 
 function appendToPath(path, x, y, precision) {
-  const loc = [roundTo(x, precision), roundTo(y, precision)];
-  if (path.length < 2) {
-    path.push(loc);
-    return;
-  }
+  const loc = {
+    x: roundTo(x, precision),
+    y: roundTo(y, precision),
+  };
 
-  const [x1, y1] = path[path.length - 1];
-  if (!(x1 === x && y1 === y)) {
-    path.push(loc);
-  }
+  path.push(loc);
+  return simplify(path, 0.5);
 }
 
 function appendMouseXYToPath(pathObj, precision) {
   const [x, y] = adjustedMouseXY();
-  appendToPath(pathObj.path, x, y, precision);
+  pathObj.path = appendToPath(pathObj.path, x, y, precision);
 }
 
 export default { appendToPath, appendMouseXYToPath };
