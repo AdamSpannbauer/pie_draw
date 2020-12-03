@@ -14,8 +14,6 @@ let colorPalette;
 let colorSelected;
 
 const paths = [];
-const strokes = [];
-const wedgeNums = [];
 
 const pathPrec = 2;
 const bgColor = [0, 10, 10];
@@ -42,7 +40,7 @@ function saveCnv() {
   translate(width / 2, height / 2);
   strokeWeight(strokeSize);
 
-  art.drawPaths(paths, strokes, wedgeNums);
+  art.drawPaths(paths);
   saveCanvas(cnv, 'my_pie_drawing', 'png');
 }
 
@@ -55,9 +53,11 @@ function touchStarted() {
 
   DRAWING = true;
 
-  paths.push([]);
-  strokes.push(colorSelected);
-  wedgeNums.push(wedgeButton.nWedges);
+  paths.push({
+    path: [],
+    hsb: colorSelected,
+    nWedges: wedgeButton.nWedges,
+  });
   path.appendMouseXYToPath(paths[paths.length - 1], pathPrec);
 }
 
@@ -71,13 +71,9 @@ function setup() {
 
   const undoItem = new tbi.ToolBarItem(undoImg, toolBarHeight, () => {
     paths.pop();
-    strokes.pop();
-    wedgeNums.pop();
   });
   const eraseAllItem = new tbi.ToolBarItem(eraseAllImg, toolBarHeight, () => {
     paths.splice(0, paths.length);
-    strokes.splice(0, strokes.length);
-    wedgeNums.splice(0, wedgeNums.length);
   });
   const saveItem = new tbi.ToolBarItem(saveImg, toolBarHeight, saveCnv);
   const toolBarItems = [undoItem, eraseAllItem, saveItem];
@@ -113,7 +109,7 @@ function draw() {
     path.appendMouseXYToPath(paths[paths.length - 1], pathPrec);
   }
 
-  art.drawPaths(paths, strokes, wedgeNums);
+  art.drawPaths(paths);
   art.drawOverlay(DRAWING, wedgeButton.nWedges);
 
   translate(-width / 2, -height / 2);

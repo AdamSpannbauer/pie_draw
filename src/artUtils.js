@@ -28,20 +28,19 @@ function drawInWedges(x1, y1, x2, y2, nWedges) {
   }
 }
 
-function drawPaths(pathArray, strokes, wedgeNums) {
-  pathArray.forEach((path, i) => {
-    if (path.length < 2) {
+function drawPaths(pathObjs) {
+  pathObjs.forEach((pathObj) => {
+    if (pathObj.path.length < 2) {
       return;
     }
 
-    stroke(strokes[i]);
-    const nWedges = wedgeNums[i];
-    path.forEach(([x, y], j) => {
-      if (j === 0) {
+    stroke(pathObj.hsb);
+    pathObj.path.forEach(([x, y], i) => {
+      if (i === 0) {
         return;
       }
-      const [prevX, prevY] = path[j - 1];
-      drawInWedges(prevX, prevY, x, y, nWedges);
+      const [prevX, prevY] = pathObj.path[i - 1];
+      drawInWedges(prevX, prevY, x, y, pathObj.nWedges);
     });
   });
 }

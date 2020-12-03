@@ -21,9 +21,9 @@ function appendToPath(path, x, y, precision) {
   }
 }
 
-function appendMouseXYToPath(path, precision) {
+function appendMouseXYToPath(pathObj, precision) {
   const [x, y] = adjustedMouseXY();
-  appendToPath(path, x, y, precision);
+  appendToPath(pathObj.path, x, y, precision);
 }
 
 export default { appendToPath, appendMouseXYToPath };
