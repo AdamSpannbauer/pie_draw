@@ -4,6 +4,7 @@ import tb from './src/toolBar.js';
 import tbi from './src/toolBarItem.js';
 import ptbi from './src/paletteToolBarItem.js';
 import wb from './src/wedgeBtn.js';
+import utils from './src/detectMobile.js';
 
 let DRAWING = false;
 
@@ -75,8 +76,13 @@ function setup() {
   const eraseAllItem = new tbi.ToolBarItem(eraseAllImg, toolBarHeight, () => {
     paths.splice(0, paths.length);
   });
-  const saveItem = new tbi.ToolBarItem(saveImg, toolBarHeight, saveCnv);
-  const toolBarItems = [undoItem, eraseAllItem, saveItem];
+
+  const toolBarItems = [undoItem, eraseAllItem];
+  // Save doesnt work on mobile as of now
+  if (utils.isDesktop()) {
+    const saveItem = new tbi.ToolBarItem(saveImg, toolBarHeight, saveCnv);
+    toolBarItems.push(saveItem);
+  }
 
   colorPalette = art.generatePalette(nColors);
   nColors = colorPalette.length;
