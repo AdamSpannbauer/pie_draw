@@ -1,3 +1,4 @@
+/* eslint-disable import/extensions */
 import art from './src/artUtils.js';
 import path from './src/pathUtils.js';
 import tb from './src/toolBar.js';
@@ -66,6 +67,14 @@ function touchEnded() {
   DRAWING = false;
 }
 
+function mousePressed() {
+  touchStarted();
+}
+
+function mouseReleased() {
+  touchEnded();
+}
+
 function setup() {
   cnv = createCanvas(windowWidth, windowHeight);
   colorMode(HSB);
@@ -130,3 +139,5 @@ window.draw = draw;
 
 window.touchStarted = touchStarted;
 window.touchEnded = touchEnded;
+window.mousePressed = mousePressed;
+window.mouseReleased = mouseReleased;
